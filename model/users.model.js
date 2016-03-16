@@ -1,10 +1,9 @@
 var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
 
-var userSchema = new Schema({
+module.exports = new mongoose.Schema({
     Username : { type : String},
     Password : {type : String}
-}, {versionKey: false});
+});
 
-//permitimos que sea llamado desde el archivo principal de la aplicación
-module.exports = mongoose.model('User', userSchema);
+module.exports.set('toObject', { virtuals: true });
+module.exports.set('toJSON', { virtuals: true });

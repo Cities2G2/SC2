@@ -3,13 +3,23 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node server"
   },
   "dependencies": {
     "mongoose": "~3.6.11",
     "body-parser": "^1.5.1",
     "underscore": "1.5.2",
     "http-status": "0.1.8",
-    "express": "~4.13.1"
+    "express": "~4.12.3",
+    "express-session": "1.13.0",
+    "superagent": "1.2.0",
+    "passport": "0.2.2",
+    "passport-local": "^1.0.0",
+    "wagner-core": "0.2.0"
+  },
+  "devDependencies": {
+    "gulp": "3.8.11",
+    "gulp-mocha": "2.0.1",
+    "mocha": "2.2.4"
   }
 }
