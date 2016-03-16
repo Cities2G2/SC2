@@ -1,0 +1,49 @@
+<div class="col-sm-4 col-sm-offset-1">
+    <div class="row">
+        <form name="dataInputForm" ng-submit="mainCtrl.postData()">
+            <div class="row">
+                <h4>Post de objeto</h4>
+            </div>
+            <div class="row">
+                <div class="input-group">
+                    <span class="input-group-addon form">Adressee</span>
+                    <input class="form-control" type="text" ng-model="mainCtrl.adressee"/>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-group">
+                    <span class="input-group-addon form">Source</span>
+                    <input class="form-control" type="text" ng-model="mainCtrl.source"/>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-group">
+                    <span class="input-group-addon form">Data</span>
+                    <input class="form-control" type="text" ng-model="mainCtrl.data"/>
+                </div>
+            </div>
+            <br>
+            <input class="btn btn-default" type="submit" value="Post"/>
+        </form>
+    </div>
+    <br>
+</div>
+<div class="col-sm-4 col-sm-offset-1">
+    <div class="row">
+        <form name="dataGetForm" ng-submit="mainCtrl.getData()">
+            <div class="row">
+                <h4>Get de objeto</h4>
+            </div>
+            <div class="row">
+                <div class="input-group">
+                    <span class="input-group-addon form">Username</span>
+                    <input class="form-control" type="text" ng-model="mainCtrl.username"/>
+                </div>
+            </div>
+            <br>
+            <input class="btn btn-default" type="submit" value="Get"/>
+        </form>
+        <br>
+        <label>{{mainCtrl.res}}</label>
+    </div>
+</div>

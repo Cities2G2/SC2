@@ -1,3 +1,4 @@
-/**
- * Created by Seyo on 15/03/2016.
- */
+'use strict';
+
+angular
+    .module('clientNR',['ngRoute']);

@@ -1,10 +1,26 @@
 <!DOCTYPE html>
-<html lang="en">
+<html ng-app="clientNR" lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>ClienteNR</title>
+    <link rel="stylesheet" href="app/style/app.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+
+    <!-- google fonts -->
+    <script src="node_modules/angular/angular.js"></script>
+    <script src="node_modules/angular-route/angular-route.js"></script>
+
+    <!--App fonts-->
+    <script src="app/app.module.js"></script>
+    <script src="app/app.config.js"></script>
+
+    <!--App CONTROLLERS-->
+    <script src="app/main/main.controller.js"></script>
 </head>
 <body>
- nada
+    <div class="row">
+        <div ng-view></div>
+    </div>
 </body>
 </html>
