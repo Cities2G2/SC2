@@ -3,8 +3,8 @@ var bodyparser = require('body-parser');
 var express = require('express');
 var status = require('http-status');
 var _ = require('underscore');
-var bInt = require('../src/big-integer-scii');
-var rsa = require('../src/rsa-bignum');
+//var bInt = require('../src/big-integer-scii');
+//var rsa = require('../src/rsa-bignum');
 
 module.exports = function(wagner) {
     var objectRoute = express.Router();

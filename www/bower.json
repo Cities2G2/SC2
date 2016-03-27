@@ -1,0 +1,8 @@
+{
+  "name": "mean",
+  "dependencies": {
+    "angular": "latest",
+    "angular-route": "latest",
+    "angular-jsbn-big-integer": ""
+  }
+}

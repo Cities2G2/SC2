@@ -1,49 +1,88 @@
-<div class="col-sm-4 col-sm-offset-1">
-    <div class="row">
-        <form name="dataInputForm" ng-submit="mainCtrl.postData()">
-            <div class="row">
-                <h4>Post de objeto</h4>
-            </div>
-            <div class="row">
-                <div class="input-group">
-                    <span class="input-group-addon form">Adressee</span>
-                    <input class="form-control" type="text" ng-model="mainCtrl.adressee"/>
-                </div>
-            </div>
-            <div class="row">
-                <div class="input-group">
-                    <span class="input-group-addon form">Source</span>
-                    <input class="form-control" type="text" ng-model="mainCtrl.source"/>
-                </div>
-            </div>
-            <div class="row">
-                <div class="input-group">
-                    <span class="input-group-addon form">Data</span>
-                    <input class="form-control" type="text" ng-model="mainCtrl.data"/>
-                </div>
-            </div>
-            <br>
-            <input class="btn btn-default" type="submit" value="Post"/>
-        </form>
-    </div>
-    <br>
-</div>
-<div class="col-sm-4 col-sm-offset-1">
-    <div class="row">
-        <form name="dataGetForm" ng-submit="mainCtrl.getData()">
-            <div class="row">
-                <h4>Get de objeto</h4>
-            </div>
-            <div class="row">
-                <div class="input-group">
-                    <span class="input-group-addon form">Username</span>
-                    <input class="form-control" type="text" ng-model="mainCtrl.username"/>
-                </div>
-            </div>
-            <br>
-            <input class="btn btn-default" type="submit" value="Get"/>
-        </form>
+<div class="col-sm-10 col-sm-offset-1 viewInput">
+    <div class="tab" ng-controller="tabController as tabCtrl">
         <br>
-        <label>{{mainCtrl.res}}</label>
+        <div class="btn-group btn-group-full">
+            <button ng-class="{ active: tabCtrl.isSet(1) }" class="btn btn-default" ng-click="tabCtrl.setTab(1)">Firma Ciega</button>
+            <button ng-class="{ active: tabCtrl.isSet(2) }" class="btn btn-default" ng-click="tabCtrl.setTab(2)">No repudio 5</button>
+            <button ng-class="{ active: tabCtrl.isSet(3) }" class="btn btn-default" ng-click="tabCtrl.setTab(3)">No repudio 6</button>
+            <button ng-class="{ active: tabCtrl.isSet(4) }" class="btn btn-default" ng-click="tabCtrl.setTab(4)">Encriptación Homomorfica</button>
+            <button ng-class="{ active: tabCtrl.isSet(5) }" class="btn btn-default" ng-click="tabCtrl.setTab(5)">Numeros bignum</button>
+        </div>
+        <div ng-show="tabCtrl.isSet(1)">
+
+        </div>
+        <div ng-show="tabCtrl.isSet(2)">
+            <div class="row">
+                <div class="col-sm-4 col-sm-offset-1">
+                    <div class="row">
+                        <form name="dataInputForm" ng-submit="mainCtrl.postData()">
+                            <div class="row">
+                                <h4>Post de objeto</h4>
+                            </div>
+                            <div class="row">
+                                <div class="input-group">
+                                    <span class="input-group-addon form">Adressee</span>
+                                    <input class="form-control" type="text" ng-model="mainCtrl.adressee"/>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-group">
+                                    <span class="input-group-addon form">Source</span>
+                                    <input class="form-control" type="text" ng-model="mainCtrl.source"/>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-group">
+                                    <span class="input-group-addon form">Data</span>
+                                    <input class="form-control" type="text" ng-model="mainCtrl.data"/>
+                                </div>
+                            </div>
+                            <br>
+                            <input class="btn btn-default" type="submit" value="Post"/>
+                        </form>
+                    </div>
+                    <br>
+                </div>
+                <div class="col-sm-4 col-sm-offset-1">
+                    <div class="row">
+                        <form name="dataGetForm" ng-submit="mainCtrl.getData()">
+                            <div class="row">
+                                <h4>Get de objeto</h4>
+                            </div>
+                            <div class="row">
+                                <div class="input-group">
+                                    <span class="input-group-addon form">Username</span>
+                                    <input class="form-control" type="text" ng-model="mainCtrl.username"/>
+                                </div>
+                            </div>
+                            <br>
+                            <input class="btn btn-default" type="submit" value="Get"/>
+                        </form>
+                        <br>
+                        <label>{{mainCtrl.res}}</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div ng-show="tabCtrl.isSet(3)">
+
+        </div>
+        <div ng-show="tabCtrl.isSet(4)">
+
+        </div>
+        <div ng-show="tabCtrl.isSet(5)">
+            <div class="row">
+                <div class="col-sm-4 col-sm-offset-1">
+                    <div class="row">
+                        <div class="row">
+                            <h4>Number</h4>
+                        </div>
+                        <input class="btn btn-default" ng-click="mainCtrl.number()" value="Number"/>
+                        <br>
+                        <label>{{mainCtrl.resNum}}</label>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

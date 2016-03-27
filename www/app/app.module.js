@@ -1,4 +1,4 @@
 'use strict';
 
 angular
-    .module('clientNR',['ngRoute']);
+    .module('clientNR',['ngRoute', 'jsbn.BigInteger']);

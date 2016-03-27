@@ -16,7 +16,8 @@
     "passport": "0.2.2",
     "passport-local": "^1.0.0",
     "wagner-core": "0.2.0",
-    "big-integer": "1.6.12"
+    "big-integer": "1.6.12",
+    "bignum": ""
   },
   "devDependencies": {
     "gulp": "3.8.11",
