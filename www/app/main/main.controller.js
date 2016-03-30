@@ -4,14 +4,19 @@ angular
     .module('clientNR')
     .controller('mainController', mainController);
 
-function mainController($window, $scope, $http, BigInteger){
-    var vm = this;
+function mainController($window, $scope, $http, BigInteger, rsaFunctions){
+    var vm = this,
+        keys;
 
     vm.res = "No data";
-
     vm.postData = postData;
     vm.getData = getData;
     vm.number = number;
+    load();
+
+    function load(){
+        keys = rsaFunctions.generateKeys();
+    }
 
     function postData(){
         var uri = 'http://localhost:3000/object/',
