@@ -7,7 +7,6 @@ angular
 function rsaFunctions(BigInteger) {
 
     var service = {
-        prime: prime,
         eGcd: eGcd,
         modInv: modInv,
         generateKeys: generateKeys
@@ -18,15 +17,69 @@ function rsaFunctions(BigInteger) {
     function prime(bitlength) {
         var rnd = BigInteger.ZERO;
         var isPrime = false;
-        var two = new BigInteger(2);
+        var two = new BigInteger('2');
 
         while (!isPrime) {
-            rnd = BigInteger.randBetween(two.pow(bitLength - 1), two.pow(bitLength));
+            rnd = randBetween(two.pow(bitlength - 1), two.pow(bitlength));
             if (rnd.isProbablePrime()) {
                 isPrime = true;
             }
         }
         return new BigInteger(rnd);
+    }
+
+    function parseValue(v) {
+        if (typeof v === "number") {
+            return parseNumberValue(v);
+        }
+        if (typeof v === "string") {
+            return parseStringValue(v);
+        }
+        return v;
+    }
+
+    function parseStringValue(v) {
+        if (isPrecise(+v)) {
+            var x = +v;
+            if (x === truncate(x))
+                return new SmallInteger(x);
+            throw "Invalid integer: " + v;
+        }
+        var sign = v[0] === "-";
+        if (sign) v = v.slice(1);
+        var split = v.split(/e/i);
+        if (split.length > 2) throw new Error("Invalid integer: " + split.join("e"));
+        if (split.length === 2) {
+            var exp = split[1];
+            if (exp[0] === "+") exp = exp.slice(1);
+            exp = +exp;
+            if (exp !== truncate(exp) || !isPrecise(exp)) throw new Error("Invalid integer: " + exp + " is not a valid exponent.");
+            var text = split[0];
+            var decimalPlace = text.indexOf(".");
+            if (decimalPlace >= 0) {
+                exp -= text.length - decimalPlace - 1;
+                text = text.slice(0, decimalPlace) + text.slice(decimalPlace + 1);
+            }
+            if (exp < 0) throw new Error("Cannot include negative exponent part for integers");
+            text += (new Array(exp + 1)).join("0");
+            v = text;
+        }
+        var isValid = /^([0-9][0-9]*)$/.test(v);
+        if (!isValid) throw new Error("Invalid integer: " + v);
+        var r = [], max = v.length, l = LOG_BASE, min = max - l;
+        while (max > 0) {
+            r.push(+v.slice(min, max));
+            min -= l;
+            if (min < 0) min = 0;
+            max -= l;
+        }
+        trim(r);
+        return new BigInteger(r, sign);
+    }
+
+    function parseNumberValue(v) {
+        if (isPrecise(v)) return new SmallInteger(v);
+        return parseStringValue(v.toString());
     }
 
     function eGcd(a, b) {
@@ -58,6 +111,7 @@ function rsaFunctions(BigInteger) {
 
     function modInv(a, n) {
         var egcd = eGcd(a, n);
+        console.log(egcd);
         if (egcd.b.notEquals(BigInteger.ONE)) {
             return null; // modular inverse does not exist
         } else {
@@ -67,6 +121,28 @@ function rsaFunctions(BigInteger) {
             }
             return ret;
         }
+    }
+
+    function randBetween(a, b) {
+        a = parseValue(a);
+        b = parseValue(b);
+        var low = min(a, b), high = max(a, b);
+        console.log(low);
+        console.log(high);
+        var range = high.subtract(low);
+        console.log(range);
+        if (range.isSmall) return low.add(Math.round(Math.random() * range));
+        console.log(range);
+        var length = range.value.length - 1;
+        var result = [], restricted = true;
+        for (var i = length; i >= 0; i--) {
+            var top = restricted ? range.value[i] : BASE;
+            var digit = truncate(Math.random() * top);
+            result.unshift(digit);
+            if (digit < top) restricted = false;
+        }
+        result = arrayToSmall(result);
+        return low.add(typeof result === "number" ? new SmallInteger(result) : new BigInteger(result, false));
     }
 
     function generateKeys(bitlength) {
@@ -88,5 +164,23 @@ function rsaFunctions(BigInteger) {
         keys.publicKey = new rsa.publicKey(this.bitlength, n, e);
         keys.privateKey = new rsa.privateKey(p, q, d, keys.publicKey);
         return keys;
+    }
+
+    function max(a, b) {
+        a = parseValue(a);
+        b = parseValue(b);
+        return a.greater(b) ? a : b;
+    }
+    function min(a,b) {
+        a = parseValue(a);
+        b = parseValue(b);
+        return a.lesser(b) ? a : b;
+    }
+
+    function greater(v) {
+        return this.compare(v) > 0;
+    }
+    function lesser(v) {
+        return this.compare(v) < 0;
     }
 }
