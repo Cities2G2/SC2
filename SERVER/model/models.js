@@ -9,13 +9,10 @@ module.exports = function(wagner) {
     });
 
     var Object =
-        mongoose.model('Object', require('./object.model'), 'objects');
-    var User =
-        mongoose.model('User', require('./users.model'), 'users');
+        mongoose.model('Object', require('./object.model.js'), 'objects');
 
     var models = {
-        Object: Object,
-        User: User
+        Object: Object
     };
 
     // To ensure DRY-ness, register factories in a loop

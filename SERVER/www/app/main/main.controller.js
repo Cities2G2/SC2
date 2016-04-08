@@ -10,9 +10,9 @@ function mainController($window, $scope, $http, BigInteger, rsaFunctions){
 
     vm.res = "No data";
     vm.postData = postData;
-    vm.getData = getData;
+    //vm.getData = getData;
     vm.number = number;
-    load();
+    //load();
 
     function load(){
         keys = rsaFunctions.generateKeys();
@@ -23,7 +23,7 @@ function mainController($window, $scope, $http, BigInteger, rsaFunctions){
             message = {
                 "data": vm.data,
                 "source": vm.source,
-                "destiny": vm.adressee
+                "destiny": vm.destiny
             };
 
 
@@ -34,12 +34,36 @@ function mainController($window, $scope, $http, BigInteger, rsaFunctions){
             headers: {'Content-Type': 'application/json; charset=utf-8'}
         }).then(function successCallback(response){
             console.log(response);
+            vm.res = response.data;
+            postTTP();
         }, function errorCallback(response){
             console.log(response);
         });
     }
 
-    function getData(){
+    function postTTP(){
+        var uri = 'http://localhost:3002/object/',
+            message = {
+                "data": vm.data,
+                "source": vm.source,
+                "destiny": "TTP"
+            };
+
+
+        return $http({
+            method: 'POST',
+            url: uri,
+            data: JSON.stringify(message),
+            headers: {'Content-Type': 'application/json; charset=utf-8'}
+        }).then(function successCallback(response){
+            console.log(response);
+            vm.res = response.data;
+        }, function errorCallback(response){
+            console.log(response);
+        });
+    }
+
+    /*function getData(){
         var uri = 'http://localhost:3000/object/destiny/' + vm.username;
 
         return $http({
@@ -51,7 +75,7 @@ function mainController($window, $scope, $http, BigInteger, rsaFunctions){
         }, function errorCallback(response){
             vm.res = "error" + response;
         });
-    }
+    }*/
 
     function number(){
         var a = new BigInteger('91823918239182398123');

@@ -22,7 +22,7 @@
                             <div class="row">
                                 <div class="input-group">
                                     <span class="input-group-addon form">Adressee</span>
-                                    <input class="form-control" type="text" ng-model="mainCtrl.adressee"/>
+                                    <input class="form-control" type="text" ng-model="mainCtrl.destiny"/>
                                 </div>
                             </div>
                             <div class="row">
@@ -45,20 +45,6 @@
                 </div>
                 <div class="col-sm-4 col-sm-offset-1">
                     <div class="row">
-                        <form name="dataGetForm" ng-submit="mainCtrl.getData()">
-                            <div class="row">
-                                <h4>Get de objeto</h4>
-                            </div>
-                            <div class="row">
-                                <div class="input-group">
-                                    <span class="input-group-addon form">Username</span>
-                                    <input class="form-control" type="text" ng-model="mainCtrl.username"/>
-                                </div>
-                            </div>
-                            <br>
-                            <input class="btn btn-default" type="submit" value="Get"/>
-                        </form>
-                        <br>
                         <label>{{mainCtrl.res}}</label>
                     </div>
                 </div>

@@ -4,6 +4,10 @@ var objectSchema = {
     _id: { type: String },
     data: { type:String },
     source: {type: String},
+    proof: {
+        type: {type: String},
+        proof: {type: String}
+    },
     destiny: {type: String}
 };
 

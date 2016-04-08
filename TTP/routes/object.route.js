@@ -3,6 +3,7 @@ var bodyparser = require('body-parser');
 var express = require('express');
 var status = require('http-status');
 var _ = require('underscore');
+var https = require('https');
 //var bInt = require('../src/big-integer-scii');
 //var rsa = require('../src/rsa-bignum');
 
@@ -10,46 +11,42 @@ module.exports = function(wagner) {
     var objectRoute = express.Router();
     objectRoute.use(bodyparser.json());
 
-    //GET - Return a list of User
-    objectRoute.get('/destiny/:Destiny',wagner.invoke(function(Object){
-        return function (req, res){
-            console.log("GET - /object/:Destiny");
-            Object.find(function (err, objects) {
-                if (err) res.send(500, "Mongo Error");
-                else res.send(200, objects);
-            });
+    var options = {
+        host: "localhost",
+        port: 3000,
+        path: '/object/',
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
         }
-    }));
-
-    //GET - Return a list of User
-    objectRoute.get('/id/:id',wagner.invoke(function(Object){
-        return function (req, res){
-            console.log("GET - /user/:Username");
-            Object.findOne({_id: req.params.id}, function (err, object) {
-                if(err) res.send(500, 'Server error');
-                else {
-                    if(object) res.send(200, object);
-                    else res.send(404, 'No se encuentra este id de objeto, revise la petición');
-                }
-
-            });
-        }
-    }));
+    };
 
     //POST - Insert a new User in the DB
-    objectRoute.post('/', wagner.invoke(function(Object, User){
+    objectRoute.post('/', wagner.invoke(function(Object){
         return function(req, res) {
             console.log('POST - /object');
             console.log(req.body);
             var newObject = new Object({
-                data: req.body.data,
+                data: req.body.key,
+                source: req.body.source,
+                destiny: req.body.destiny
+            });
+
+            var ttpRes = new Object({
+                data: req.body.key,
                 source: req.body.source,
                 destiny: req.body.destiny
             });
 
             newObject.save(function (err) {
                 if (!err) {
-                    res.send(200, "Okey");
+                    res.send(200, ttpRes);
+                    console.log(newObject);
+                    //NodeJS
+                    var reqPost = https.request(options, function(){});
+                    reqPost.on('error', function(){});
+                    reqPost.write(ttpRes);
+                    reqPost.end();
                 } else {
                     console.log(err);
                     if (err.name == 'ValidationError') {
