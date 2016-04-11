@@ -4,7 +4,7 @@ angular
     .module('clientNR')
     .controller('mainController', mainController);
 
-function mainController($window, $scope, $http, BigInteger, rsaFunctions){
+function mainController($window, $scope, $http, BigInteger, rsaFunctions, bigInt){
     var vm = this,
         keys;
 
@@ -15,7 +15,8 @@ function mainController($window, $scope, $http, BigInteger, rsaFunctions){
     load();
 
     function load(){
-        keys = rsaFunctions.generateKeys();
+        keys = rsaFunctions.generateKeys(512);
+        console.log(keys);
     }
 
     function postData(){

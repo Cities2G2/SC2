@@ -3,6 +3,8 @@
   "dependencies": {
     "angular": "latest",
     "angular-route": "latest",
-    "angular-jsbn-big-integer": ""
+    "angular-jsbn-big-integer": "",
+    "angular-biginteger":""
+
   }
 }
