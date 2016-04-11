@@ -3,23 +3,12 @@ var bodyparser = require('body-parser');
 var express = require('express');
 var status = require('http-status');
 var _ = require('underscore');
-var https = require('https');
-//var bInt = require('../src/big-integer-scii');
-//var rsa = require('../src/rsa-bignum');
+var http = require('http');
+var querystring = require('querystring');
 
 module.exports = function(wagner) {
     var objectRoute = express.Router();
     objectRoute.use(bodyparser.json());
-
-    var options = {
-        host: "localhost",
-        port: 3000,
-        path: '/object/',
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    };
 
     //POST - Insert a new User in the DB
     objectRoute.post('/', wagner.invoke(function(Object){
@@ -34,19 +23,29 @@ module.exports = function(wagner) {
 
             var ttpRes = new Object({
                 data: req.body.key,
-                source: req.body.source,
+                source: "TTP",
                 destiny: req.body.destiny
             });
 
+            var ttpToServer = JSON.stringify(ttpRes);
+            var options = {
+                host: "localhost",
+                port: 3000,
+                path: '/object/',
+                method: 'POST',
+                headers: {
+                    'content-type': 'application/json',
+                    "Content-Length": Buffer.byteLength(ttpToServer)
+                }
+            };
+
             newObject.save(function (err) {
                 if (!err) {
-                    res.send(200, ttpRes);
+                    res.status(200).send(ttpRes);
                     console.log(newObject);
                     //NodeJS
-                    var reqPost = https.request(options, function(){});
-                    reqPost.on('error', function(){});
-                    reqPost.write(ttpRes);
-                    reqPost.end();
+                    var reqPost = http.request(options);
+                    reqPost.end(ttpToServer);
                 } else {
                     console.log(err);
                     if (err.name == 'ValidationError') {

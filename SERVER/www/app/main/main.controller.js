@@ -21,9 +21,9 @@ function mainController($window, $scope, $http, BigInteger, rsaFunctions){
     function postData(){
         var uri = 'http://localhost:3000/object/',
             message = {
-                "data": vm.data,
-                "source": vm.source,
-                "destiny": vm.destiny
+                "data": "Mensaje",
+                "source": "Client",
+                "destiny": "Server"
             };
 
 
@@ -44,9 +44,9 @@ function mainController($window, $scope, $http, BigInteger, rsaFunctions){
     function postTTP(){
         var uri = 'http://localhost:3002/object/',
             message = {
-                "data": vm.data,
-                "source": vm.source,
-                "destiny": "TTP"
+                "key": "Key",
+                "source": "Cliente",
+                "destiny": "Server"
             };
 
 
