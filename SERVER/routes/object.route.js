@@ -37,7 +37,7 @@ module.exports = function(wagner) {
     }));
 
     //POST - Insert a new User in the DB
-    objectRoute.post('/', wagner.invoke(function(Object, User){
+    objectRoute.post('/', wagner.invoke(function(Object){
         return function(req, res) {
             console.log('POST - /object');
             console.log(req.body);
@@ -47,15 +47,20 @@ module.exports = function(wagner) {
                 destiny: req.body.destiny
             });
 
+            var serverRes = new Object({
+                source: req.body.destiny,
+                destiny: req.body.source
+            });
+
             newObject.save(function (err) {
                 if (!err) {
-                    res.send(200, "Okey");
+                    res.status(200).send(serverRes);
                 } else {
                     console.log(err);
                     if (err.name == 'ValidationError') {
-                        res.send(400, 'Validation error');
+                        res.status(400).send('Validation error');
                     } else {
-                        res.send(500, 'Server error');
+                        res.status(500).send('Server error');
                     }
                 }
             });
