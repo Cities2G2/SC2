@@ -1,6 +1,7 @@
 var passport = require('passport');
 var bodyparser = require('body-parser');
 var express = require('express');
+var bigInt = require('../src/big-integer-scii.js');
 var status = require('http-status');
 var _ = require('underscore');
 //var bInt = require('../src/big-integer-scii');
@@ -64,6 +65,40 @@ module.exports = function(wagner) {
                     }
                 }
             });
+        }
+    }));
+
+
+    //Post Blind Signature
+    objectRoute.post('/bs', wagner.invoke(function(Object){
+        return function(req, res) {
+            console.log('POST - /object/bs');
+            var n = req.body.N;
+            var o = req.body.data;
+            console.log('o es:(ha de ser igual a bc) ',o);
+            console.log('N es: ',n);
+
+            N = bigInt(n);
+            O = bigInt(o);
+
+            /////probando
+            var num = bigInt("134123412412414341441324");
+            console.log('num³ mod N',num.modPow(3,N).mod(N));
+            /////
+
+            console.log('Pre modpow: ',O.toString(10));
+            O2 = O.modPow(3,N).mod(N);
+            //O2=O;
+            console.log('Post modpow: ',O2.toString(10));
+
+            var serverRes = new Object({
+                source: req.body.destiny,
+                destiny: req.body.source,
+                data: O2.toString(10),
+            });
+
+            res.status(200).send(serverRes);
+
         }
     }));
 

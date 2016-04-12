@@ -9,7 +9,31 @@
             <button ng-class="{ active: tabCtrl.isSet(5) }" class="btn btn-default" ng-click="tabCtrl.setTab(5)">Numeros bignum</button>
         </div>
         <div ng-show="tabCtrl.isSet(1)">
-
+            <div class="row">
+                <div class="col-sm-4 col-sm-offset-1">
+                    <div class="row">
+                        <form name="dataInputForm" ng-submit="mainCtrl.postDataBs()">
+                            <div class="row">
+                                <h4>Post Firma Ciega</h4>
+                            </div>
+                            <div class="row">
+                                <div class="input-group">
+                                    <span class="input-group-addon form">Mensaje a firmar</span>
+                                    <input class="form-control" type="text" ng-model="mainCtrl.dataBs"/>
+                                </div>
+                            </div>
+                            <br>
+                            <input class="btn btn-default" type="submit" value="Post"/>
+                        </form>
+                    </div>
+                    <br>
+                </div>
+                <div class="col-sm-4 col-sm-offset-1">
+                    <div class="row">
+                        <label>{{mainCtrl.res}}</label>
+                    </div>
+                </div>
+            </div>
         </div>
         <div ng-show="tabCtrl.isSet(2)">
             <div class="row">
