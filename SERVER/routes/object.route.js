@@ -4,6 +4,7 @@ var express = require('express');
 var bigInt = require('../src/big-integer-scii.js');
 var status = require('http-status');
 var _ = require('underscore');
+var CryptoJS = require("crypto-js");
 //var bInt = require('../src/big-integer-scii');
 //var rsa = require('../src/rsa-bignum');
 
@@ -42,6 +43,7 @@ module.exports = function(wagner) {
         return function(req, res) {
             console.log('POST - /object');
             console.log(req.body);
+            console.log(CryptoJS.SHA1(req.body.data, '12345'));
             var newObject = new Object({
                 data: req.body.data,
                 source: req.body.source,
