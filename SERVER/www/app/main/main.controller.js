@@ -11,8 +11,11 @@ function mainController($window, $scope, $http, BigInteger, rsaFunctions, bigInt
     vm.res = "No data";
     vm.postData = postData;
     vm.postDataBs = postDataBs;
-    //vm.getData = getData;
+
+    vm.getData = getData;
     vm.number = number;
+    vm.n= "1";
+    vm.e= bigInt("65537");
     load();
 
     function load(){
@@ -23,27 +26,38 @@ function mainController($window, $scope, $http, BigInteger, rsaFunctions, bigInt
     function postDataBs(){
         console.log("hola");
         console.log(vm.dataBs);
-
+        console.log(vm.e);
+        console.log(vm.n);
         ////probando
         var N = bigInt(keys.publicKey.n.toString(10));
         var num = bigInt("134123412412414341441324");
-        console.log('num³ mod N',num.modPow(3,N).mod(N));
+        console.log('num³ mod N',num.modPow(3,N).mod(N).toString(10));
         ////
-
+/*
         var m = bigInt(vm.dataBs.toString('hex'), 16);
-        console.log('m es: ',m);
+        console.log('m es: ', m.toString(10));
         var r = bigInt.randBetween(0, keys.publicKey.n);
 
         var blindMsg = m.multiply(r.modPow(keys.publicKey.e, keys.publicKey.n)).mod(keys.publicKey.n);
         console.log('blind msg   m·r^e mod n:', '\n', blindMsg.toString(10), '\n');
 
+        //var bc = blindMsg;
         var bc = keys.privateKey.encrypt(blindMsg);
         console.log('bc, blindMsg encriptado(es lo que envio)',bc.toString(10));
         //var N = bigInt(keys.publicKey.n.toString(10));
-        console.log('bc ^3 mod N',bc.modPow(3,N).mod(N).toString(10));
+        //console.log('bc ^3 mod N',bc.modPow(3,N).mod(N).toString(10));
 
-        var dec = keys.publicKey.decrypt(bc);
-        console.log('blindMsg desencriptado(igual a blindMsg)', dec.toString(10));
+        //var dec = keys.publicKey.decrypt(bc);
+        //console.log('blindMsg desencriptado(igual a blindMsg)', dec.toString(10));
+*/
+        var m = bigInt(vm.dataBs.toString('hex'), 16);
+        console.log('m es: ', m.toString(10));
+        var r = bigInt.randBetween(0, vm.n);
+
+        var blindMsg = m.multiply(r.modPow(vm.e, vm.n)).mod(vm.n);
+        console.log('blind msg   m·r^e mod n:', '\n', blindMsg.toString(10), '\n');
+
+        var bc = blindMsg;
 
         var uri = 'http://localhost:3000/object/bs',
             message = {
@@ -51,6 +65,7 @@ function mainController($window, $scope, $http, BigInteger, rsaFunctions, bigInt
                 "source": "Client",
                 "destiny": "Server",
                 "N": keys.publicKey.n.toString(10),
+                "R": r.toString(10),
             };
 
 
@@ -64,13 +79,15 @@ function mainController($window, $scope, $http, BigInteger, rsaFunctions, bigInt
             var o = response.data.data;
             console.log('o es: (el post modpow)',o);
             var O = bigInt(o);
-            var c = O.multiply(rsaFunctions.modInv(r,keys.publicKey.n));
-            console.log(c.toString(10));
+            var c = O.multiply(rsaFunctions.modInv(r,vm.n));
+            var d = c.modPow(vm.e,vm.n);
+            alert(d.toString(10));
+            /*console.log(c.toString(10));
 
             var d = keys.publicKey.decrypt(c);
             alert(d.toString(10));
             console.log(response);
-            //vm.res = response.data;
+            //vm.res = response.data;*/
 
         }, function errorCallback(response){
             console.log(response);
@@ -123,19 +140,21 @@ function mainController($window, $scope, $http, BigInteger, rsaFunctions, bigInt
         });
     }
 
-    /*function getData(){
-        var uri = 'http://localhost:3000/object/destiny/' + vm.username;
+    function getData(){
+        var uri = 'http://localhost:3000/object/data';
 
         return $http({
             method: 'GET',
             url: uri,
             headers: {'Content-Type': 'application/json; charset=utf-8'}
         }).then(function succesCallback(response){
-            vm.res = response.data;
+            vm.n=bigInt(response.data.data);
+
+            console.log(vm.n);
         }, function errorCallback(response){
             vm.res = "error" + response;
         });
-    }*/
+    }
 
     function number(){
         var a = new BigInteger('91823918239182398123');
