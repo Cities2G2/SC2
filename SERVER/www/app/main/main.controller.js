@@ -13,7 +13,6 @@ function mainController($window, $scope, $http, BigInteger, rsaFunctions, bigInt
     vm.postDataBs = postDataBs;
 
     vm.getData = getData;
-    vm.number = number;
     vm.n= "1";
     vm.e= bigInt("65537");
     load();
@@ -156,10 +155,5 @@ function mainController($window, $scope, $http, BigInteger, rsaFunctions, bigInt
         }, function errorCallback(response){
             vm.res = "error" + response;
         });
-    }
-
-    function number(){
-        var a = new BigInteger('91823918239182398123');
-        alert(a.bitLength()); // 67
     }
 }
