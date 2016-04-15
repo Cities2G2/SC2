@@ -68,7 +68,7 @@ module.exports = function (wagner) {
         }
     }));
 
-//GET - BS
+//GET - BS - returns N public parameter
     objectRoute.get('/data', wagner.invoke(function (Object) {
         return function (req, res) {
             console.log("GET - /object/data");
@@ -95,7 +95,7 @@ module.exports = function (wagner) {
             var o = req.body.data;
             var r= req.body.R;
             console.log('o es:(ha de ser igual a bc) ', o);
-            console.log('N es: ', n);
+            //console.log('N es: ', n);
 
             N = bigInt(n);
             O = bigInt(o);
@@ -103,7 +103,7 @@ module.exports = function (wagner) {
 
             /////probando
             var num = bigInt("134123412412414341441324");
-            console.log('num³ mod N', num.modPow(3, N).mod(N));
+            //console.log('num³ mod N', num.modPow(3, N).mod(N));
             /////
 
             /*console.log('Pre modpow: ', O.toString(10));
@@ -112,6 +112,7 @@ module.exports = function (wagner) {
             console.log('Post modpow: ', O2.toString(10));*/
 
             O2= keys.privateKey.encrypt(O);
+            console.log('(blind) encryption with private:', '\n', O2.toString(10), '\n');
 
             var serverRes = new Object({
                 source: req.body.destiny,
