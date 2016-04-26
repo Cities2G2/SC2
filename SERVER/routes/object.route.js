@@ -42,8 +42,10 @@ module.exports = function(wagner) {
     objectRoute.post('/', wagner.invoke(function(Object){
         return function(req, res) {
             console.log('POST - /object');
-            console.log(req.body);
-            console.log(CryptoJS.SHA1(req.body.data, '12345'));
+            console.log(CryptoJS.AES.decrypt(req.body.data, '12345').toString());
+            var publicKeyOrg = rsa.publicKey(req.body.publicKey.bits, req.body.publicKey.n,req.body.publicKey.e);
+            var proofOrg = publicKeyOrg.decrypt(req.body.PO);
+            console.log(proofOrg);
             var newObject = new Object({
                 data: req.body.data,
                 source: req.body.source,
@@ -96,7 +98,7 @@ module.exports = function(wagner) {
             var serverRes = new Object({
                 source: req.body.destiny,
                 destiny: req.body.source,
-                data: O2.toString(10),
+                data: O2.toString(10)
             });
 
             res.status(200).send(serverRes);

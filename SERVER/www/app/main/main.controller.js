@@ -80,8 +80,10 @@ function mainController($http, rsaFunctions, bigInt){
         var uri = 'http://localhost:3000/object/',
             hash = CryptoJS.SHA1(vm.data).toString(),
             m = bigInt(hash.toString('hex'), 16),
-            proofOrg = keys.privateKey.encrypt(m),
-            msgEncrypt = CryptoJS.SHA1(vm.data, '12345'),
+            proofString = "SERVER" + "AAA" + createId() + "AAA" + hash,
+            proofBigInt = bigInt(proofString.toString('hex'), 16),
+            proofOrg = keys.privateKey.encrypt(proofBigInt),
+            msgEncrypt = CryptoJS.AES.encrypt(vm.data, '12345').toString(),
             message = {
                 "data": msgEncrypt,//vm.data,
                 "destiny": uri,
@@ -89,7 +91,6 @@ function mainController($http, rsaFunctions, bigInt){
                 "publicKey": keys.publicKey
             };
 
-        console.log(msgEncrypt);
         return $http({
             method: 'POST',
             url: uri,
@@ -124,5 +125,9 @@ function mainController($http, rsaFunctions, bigInt){
         }, function errorCallback(response){
             console.log(response);
         });
+    }
+
+    function createId(){
+        return Math.random().toString(36).substr(2, 9);
     }
 }
