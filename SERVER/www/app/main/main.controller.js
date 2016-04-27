@@ -96,19 +96,21 @@ function mainController($http, rsaFunctions, bigInt){
 
 
     function postData(){
-        var uri = 'http://localhost:3000/object/',
-            hash = CryptoJS.SHA1(vm.data).toString(),
-            m = bigInt(hash.toString('hex'), 16),
-            proofString = "SERVER" + "AAA" + createId() + "AAA" + hash,
-            proofBigInt = bigInt(proofString.toString('hex'), 16),
-            proofOrg = keys.privateKey.encrypt(proofBigInt),
-            msgEncrypt = CryptoJS.AES.encrypt(vm.data, '12345').toString(),
-            message = {
-                "data": msgEncrypt,//vm.data,
+       var uri = 'http://localhost:3000/object/datanr',
+           hash = CryptoJS.SHA1(vm.data).toString(),
+           identMsg = createId(),
+           keyMsg = createId(),
+           proofString = "SERVER" + "AAA" + identMsg + "AAA" + hash,
+           proofBigInt = bigInt(proofString.toString('hex'), 16),
+           proofOrg = keys.privateKey.encrypt(proofBigInt),
+           msgEncrypt = CryptoJS.AES.encrypt(vm.data, keyMsg).toString(),
+           message = {
+                "identMsg": identMsg,
+                "data": msgEncrypt,
                 "destiny": uri,
                 "PO": proofOrg,
                 "publicKey": keys.publicKey
-            };
+           };
 
         return $http({
             method: 'POST',
@@ -118,18 +120,23 @@ function mainController($http, rsaFunctions, bigInt){
         }).then(function successCallback(response){
             console.log(response);
             vm.res = response.data;
-            postTTP();
+            postTTP(keyMsg);
         }, function errorCallback(response){
             console.log(response);
         });
     }
 
-    function postTTP(){
+    function postTTP(keyMsg){
         var uri = 'http://localhost:3002/object/',
+            proofString = "SERVER" + "AAA" + vm.res.identMsg + "AAA" + keyMsg,
+            proofBigInt = bigInt(proofString.toString('hex'), 16),
+            proofKeyOrg = keys.privateKey.encrypt(proofBigInt),
             message = {
-                "key": "Key",
-                "source": "Cliente",
-                "destiny": "Server"
+                "source": "CLIENTE",
+                "destiny": "SERVER",
+                "identMsg": vm.res.identMsg,
+                "key": keyMsg,
+                "PKO": proofKeyOrg
             };
 
 

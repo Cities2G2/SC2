@@ -2,14 +2,11 @@ var mongoose = require('mongoose');
 
 var objectSchema = {
     _id: { type: String },
-    data: { type:String },
     source: {type: String},
-    proof: {
-        type: {type: String},
-        proof: {type: String}
-    },
-    destiny: {type: String}
+    destiny: {type: String},
+    key: {type: String},
+    identData: {type: String}
 };
 
-module.exports = new mongoose.Schema(objectSchema);
+module.exports = new mongoose.Schema(objectSchema, {versionKey: false});
 module.exports.categorySchema = objectSchema;

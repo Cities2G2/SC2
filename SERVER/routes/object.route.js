@@ -5,7 +5,6 @@ var bigInt = require('../src/big-integer-scii.js');
 var status = require('http-status');
 var _ = require('underscore');
 var CryptoJS = require("crypto-js");
-//var bInt = require('../src/big-integer-scii');
 var rsa = require('../src/rsa-big-integer.js');
 keys = rsa.generateKeys(512);
 module.exports = function (wagner) {
@@ -38,24 +37,32 @@ module.exports = function (wagner) {
         }
     }));
 
-    //POST - Insert a new User in the DB
-    objectRoute.post('/', wagner.invoke(function (Object) {
+    //POST - Insert a new Message in the DB
+    objectRoute.post('/datanr', wagner.invoke(function (Object) {
         return function (req, res) {
-            console.log('POST - /object');
-            console.log(CryptoJS.AES.decrypt(req.body.data, '12345').toString());
-            var publicKeyOrg = rsa.publicKey(req.body.publicKey.bits, req.body.publicKey.n,req.body.publicKey.e);
-            var proofOrg = publicKeyOrg.decrypt(req.body.PO);
-            console.log(proofOrg);
+            console.log("POST - /object/datanr");
+            //var publicKeyOrg = rsa.publicKeyP(req.body.publicKey.n, req.body.publicKey.e);
+            //var proofOrg = publicKeyOrg.decrypt(req.body.PO);
+            //console.log(proofOrg);
+            var hash = CryptoJS.SHA1(req.body.data).toString(),
+                proofString = "CLIENT" + "AAA" + req.body.identMsg + "AAA" + hash,
+                proofBigInt = bigInt(proofString.toString('hex'), 16),
+                proofRec = keys.privateKey.encrypt(proofBigInt);
+
             var newObject = new Object({
                 data: req.body.data,
                 source: req.body.source,
-                destiny: req.body.destiny
+                destiny: req.body.destiny,
+                dataC: req.body.data,
+                identData: req.body.identMsg
             });
 
-            var serverRes = new Object({
-                source: req.body.destiny,
-                destiny: req.body.source
-            });
+            var serverRes = {
+                destiny: req.body.source,
+                identMsg: req.body.identMsg,
+                PR: proofRec,
+                publicKey: keys.publicKey
+            };
 
             newObject.save(function (err) {
                 if (!err) {
@@ -68,6 +75,39 @@ module.exports = function (wagner) {
                         res.status(500).send('Server error');
                     }
                 }
+            });
+        }
+    }));
+
+    //POST - Insert a new Message in the DB
+    objectRoute.put('/keynr', wagner.invoke(function (Object) {
+        return function (req, res) {
+            console.log("PUT - /object/keynr");
+            Object.findOne({identData: req.body.identData}, function (err, object) {
+                if (err) res.status(500).send('Server error');
+                else {
+                    if (object) {
+                        var bytes  = CryptoJS.AES.decrypt(object.dataC, req.body.key);
+                        var plaintext = bytes.toString(CryptoJS.enc.Utf8);
+                        object.key = req.body.key;
+                        object.dataCK = plaintext;
+                        console.log(object);
+                        object.save(function (err) {
+                            if (!err) {
+                                res.status(200).send('OK');
+                            } else {
+                                if (err.name == 'ValidationError') {
+                                    res.status(400).send('Validation error');
+                                } else {
+                                    res.status(500).send('Server error');
+                                }
+                            }
+                        });
+
+                    }
+                    else res.status(404).send('No se encuentra este identData de objeto, revise la petición');
+                }
+
             });
         }
     }));
